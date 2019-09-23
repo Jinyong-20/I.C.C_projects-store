@@ -15,18 +15,14 @@ var firstPress = true;
 var penStart = false;
 var a = 0;
 var modeChanged = false;
-let img;
 
 
 function setup() {
   createCanvas(400, 400);
-  img =  loadImage('11111.jpg');
   background(255);
 }
 
 function draw() {
-  
-  image(img,0,0,400,400);
   if(keyIsPressed)
   {
     if(modeChanged == false)
