@@ -13,32 +13,20 @@ var d2Y;
 var mode = 0;
 var firstPress = true;
 var penStart = false;
+var a = 0;
 var modeChanged = false;
-var btnClicked = false;
-let a;
-var strokeSize;
-var patternSize;
 let img;
 
 
 function setup() {
-  createCanvas(600, 400);
-  a = color(0,0,0);
-  strokeSize = 5;
-  patternSize = 1;
+  createCanvas(400, 400);
+  img =  loadImage('11111.jpg');
   background(255);
-  textSize(10);
-  fill(0);
-  stroke(255);
-  strokeWeight(5);
-  text("Mode : "+ (mode+1), 270, 350);
-  img = loadImage("UI.png");
-  frameRate(30);
 }
 
 function draw() {
-  image(img,0,0,600,400)
-  btnClick();
+  
+  image(img,0,0,400,400);
   if(keyIsPressed)
   {
     if(modeChanged == false)
@@ -46,15 +34,7 @@ function draw() {
       modeChanged = true;  
       mode += 1;
       if(mode == 4)
-      {
         mode = 0;
-        a = color(0,0,0);
-      }
-      textSize(10);
-      fill(0);
-      stroke(255);
-      strokeWeight(5);
-      text("Mode : "+ (mode+1), 270, 350);
     }
   }
   else
@@ -63,6 +43,7 @@ function draw() {
   }
   if(mode == 0)
   {
+    a = 0;
     lineDrawing(a);
   }
   if(mode == 1)
@@ -75,7 +56,7 @@ function draw() {
   }
   if(mode == 3)
   {
-    a = color(255,255,255);
+    a = 255;
     lineDrawing(a);
   }
 }
@@ -86,7 +67,7 @@ function lineDrawing(a)
   if (mouseIsPressed) 
     {
       mousePress = true;
-      strokeWeight(strokeSize);
+      strokeWeight(5);
       stroke(a);
       d1X = d2X;
       d2X = mouseX;
@@ -122,7 +103,7 @@ function ellipsePattern()
       bY = mouseY;
       noFill();
       stroke(255);
-      strokeWeight(patternSize); //n
+      strokeWeight(1); //n
       ellipseMode(CORNERS);
       ellipse(aX, aY, bX, bY);
     }
@@ -153,7 +134,7 @@ function rectPattern()
       bY = mouseY;
       noFill();
       stroke(255);
-      strokeWeight(patternSize); //n
+      strokeWeight(1); //n
       rectMode(CORNERS);
       rect(aX, aY, bX, bY);
     }
@@ -167,44 +148,4 @@ function rectPattern()
       }
       pressStart = true;
     }
-}
-
-function btnClick()
-{
-  if(mouseIsPressed)
-  {
-    if(btnClicked == false)
-    {
-      btnClicked = true;
-      if(mouseX >=516 && mouseX <=542 && mouseY >=61 && mouseY <= 87)
-        a = color(0,0,0);
-      if(mouseX >=556 && mouseX <=582 && mouseY >=61 && mouseY <= 87)
-        a = color(0,0,255);
-      if(mouseX >=516 && mouseX <=542 && mouseY >=101 && mouseY <= 127)
-        a = color(255,0,0);
-      if(mouseX >=556 && mouseX <=582 && mouseY >=101 && mouseY <= 127)
-        a = color(0,255,0);
-      if(mouseX >=536 && mouseX <=562 && mouseY >=290 && mouseY <= 303)
-        if(patternSize < 10)
-          patternSize += 1;
-      if(mouseX >=536 && mouseX <=562 && mouseY >=338 && mouseY <= 350)
-        if(patternSize > 1)
-          patternSize -= 1; 
-      if(mouseX >=20 && mouseX <=77 && mouseY >=275 && mouseY <= 323)
-      {
-        console.log("File saved!");
-        save('PatternArt.jpg');
-      }
-    }
-    if(mouseX >=536 && mouseX <=562 && mouseY >=177 && mouseY <= 190)
-      if(strokeSize < 50)
-        strokeSize += 1;
-    if(mouseX >=536 && mouseX <=562 && mouseY >=225 && mouseY <= 238)
-      if(strokeSize > 1)
-        strokeSize -= 1;
-  }
-  else
-  {
-    btnClicked = false;
-  }
 }
