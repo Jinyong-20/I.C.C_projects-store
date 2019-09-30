@@ -1,210 +1,97 @@
-var aX;
-var aY;
-var bX;
-var bY;
-var pressStart = true;
-var pressReleased = false;
-var mouseXwas;
-var mouseYwas;
-var d1X;
-var d1Y;
-var d2X;
-var d2Y;
-var mode = 0;
-var firstPress = true;
-var penStart = false;
-var modeChanged = false;
-var btnClicked = false;
-let a;
-var strokeSize;
-var patternSize;
-let img;
-
-
+var a,b,c;
+let k;
 function setup() {
-  createCanvas(600, 400);
-  a = color(0,0,0);
-  strokeSize = 5;
-  patternSize = 1;
-  background(255);
-  textSize(10);
-  fill(0);
-  stroke(255);
-  strokeWeight(5);
-  text("Mode : "+ (mode+1), 270, 350);
-  img = loadImage("UI.png");
-  frameRate(30);
+  createCanvas(windowWidth, windowHeight);
+  a = random(0,255);
+  b = random(0,255);
+  c = random(0,255);
+  k = color(0,0,0);
 }
+
+
 
 function draw() {
-  image(img,0,0,600,400)
-  btnClick();
+  background(255);
+  randomSeed(0);
+  
+  var x,y,r,rr,rrr,rrrr;
+  var delta = 50;
+  
+  var volume = map(mouseX, 0, windowWidth, 0,1);
+  var circle = map(mouseY, 0, windowHeight, 0,1);
+  var coLor = map(mouseX, 0, windowWidth, 0, 255);
+  var coloR = map(mouseY, 0, windowHeight, 0, 255);
+  
+  
+  for(y=0; y<windowHeight; y+=delta)
+  {
+    for(x=0; x<windowWidth; x+=delta) 
+    {
+      r = random(0,1);
+      for(var i=0;i<2;i++)
+      {
+        rr = random(0,1);
+        if(r < volume)
+        {
+          if(rr<0.25)
+          {
+            line(x+delta/2,y+delta/2,x,y);
+          }
+          else if(rr<0.5)
+          {
+            line(x+delta/2,y+delta/2,x+delta,y);
+          }
+          else if(rr<0.75)
+          {
+            line(x+delta/2,y+delta/2,x,y+delta);
+          }
+          else
+          {
+            line(x+delta/2,y+delta/2,x+delta,y+delta);
+          }
+        }
+      }
+    }  
+  }
+  for(x=0; x<windowWidth; x+=delta)
+  {
+    for(y=0; y<windowHeight; y+=delta)
+    {
+      rrr = random(0,1);
+      rrrr = random(0,1);
+      if(rrr*4<circle)
+      {
+        ellipseMode(CENTER);
+        fill(c,coLor,coloR);
+        noStroke();
+        if(rrrr<0.25)
+        {
+          ellipse(x+delta/2, y+delta/4,7,7);
+        }
+        else if(rrrr<0.5)
+        {
+          ellipse(x+delta/4*3, y+delta/2,7,7);
+        }
+        else if(rrrr<0.75)
+        {
+          ellipse(x+delta/4, y+delta/2,7,7);
+        }
+        else
+        {
+          ellipse(x+delta/2, y+delta/4*3,7,7);
+        }
+        stroke(k);
+      }
+    }
+  }
+  if(mouseIsPressed)
+  {
+    k = color(coLor,coloR,a);
+    stroke(k);
+  }
   if(keyIsPressed)
   {
-    if(modeChanged == false)
-    {
-      modeChanged = true;  
-      mode += 1;
-      if(mode == 4)
-      {
-        mode = 0;
-        a = color(0,0,0);
-      }
-      textSize(10);
-      fill(0);
-      stroke(255);
-      strokeWeight(5);
-      text("Mode : "+ (mode+1), 270, 350);
-    }
-  }
-  else
-  {
-    modeChanged = false;
-  }
-  if(mode == 0)
-  {
-    lineDrawing(a);
-  }
-  if(mode == 1)
-  {
-    rectPattern();
-  }
-  if(mode == 2)
-  {
-    ellipsePattern();
-  }
-  if(mode == 3)
-  {
-    a = color(255,255,255);
-    lineDrawing(a);
-  }
-}
-
-
-function lineDrawing(a) 
-{
-  if (mouseIsPressed) 
-    {
-      mousePress = true;
-      strokeWeight(strokeSize);
-      stroke(a);
-      d1X = d2X;
-      d2X = mouseX;
-      d1Y = d2Y;
-      d2Y = mouseY;
-      if (penStart)
-      {
-        d1X = d2X;
-        d1Y = d2Y;
-      }
-      line(d1X, d1Y, d2X, d2Y);
-      penStart = false;
-    }
-    else
-    {
-      mousePress = false;
-      penStart = true;
-    }
-}
-
-function ellipsePattern()
-{
-  if(mouseIsPressed)
-    {
-      if(pressStart)
-      {
-        aX = mouseX;
-        aY = mouseY;
-        pressStart = false;
-        pressReleased = true;
-      }
-      bX = mouseX;
-      bY = mouseY;
-      noFill();
-      stroke(255);
-      strokeWeight(patternSize); //n
-      ellipseMode(CORNERS);
-      ellipse(aX, aY, bX, bY);
-    }
-    else
-    {
-      if(pressReleased)
-      {
-        bX = mouseX;
-        bY = mouseY;
-        pressReleased = false;
-      }
-      pressStart = true;
-    }
-}
-
-function rectPattern()
-{
-    if(mouseIsPressed)
-    {
-      if(pressStart)
-      {
-        aX = mouseX;
-        aY = mouseY;
-        pressStart = false;
-        pressReleased = true;
-      }
-      bX = mouseX;
-      bY = mouseY;
-      noFill();
-      stroke(255);
-      strokeWeight(patternSize); //n
-      rectMode(CORNERS);
-      rect(aX, aY, bX, bY);
-    }
-    else
-    {
-      if(pressReleased)
-      {
-        bX = mouseX;
-        bY = mouseY;
-        pressReleased = false;
-      }
-      pressStart = true;
-    }
-}
-
-function btnClick()
-{
-  if(mouseIsPressed)
-  {
-    if(btnClicked == false)
-    {
-      btnClicked = true;
-      if(mouseX >=516 && mouseX <=542 && mouseY >=61 && mouseY <= 87)
-        a = color(0,0,0);
-      if(mouseX >=556 && mouseX <=582 && mouseY >=61 && mouseY <= 87)
-        a = color(0,0,255);
-      if(mouseX >=516 && mouseX <=542 && mouseY >=101 && mouseY <= 127)
-        a = color(255,0,0);
-      if(mouseX >=556 && mouseX <=582 && mouseY >=101 && mouseY <= 127)
-        a = color(0,255,0);
-      if(mouseX >=536 && mouseX <=562 && mouseY >=290 && mouseY <= 303)
-        if(patternSize < 10)
-          patternSize += 1;
-      if(mouseX >=536 && mouseX <=562 && mouseY >=338 && mouseY <= 350)
-        if(patternSize > 1)
-          patternSize -= 1; 
-      if(mouseX >=20 && mouseX <=77 && mouseY >=275 && mouseY <= 323)
-      {
-        console.log("File saved!");
-        save('PatternArt.jpg');
-      }
-    }
-    if(mouseX >=536 && mouseX <=562 && mouseY >=177 && mouseY <= 190)
-      if(strokeSize < 50)
-        strokeSize += 1;
-    if(mouseX >=536 && mouseX <=562 && mouseY >=225 && mouseY <= 238)
-      if(strokeSize > 1)
-        strokeSize -= 1;
-  }
-  else
-  {
-    btnClicked = false;
+    k = color(b,coLor,coloR);
+    stroke(k);
   }
 }
